@@ -6,7 +6,7 @@
 /*   By: tde-los- <tde-los-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:55:02 by tde-los-          #+#    #+#             */
-/*   Updated: 2025/04/25 09:32:10 by tde-los-         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:03:53 by tde-los-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	init_socket(char *target)
 	ip = resolve_hostname(target);
 	if (!ip)
 	{
-		ft_printf("ping: %s: Name or service not known\n", target);
+		ft_printf("ping: %s: %s\n", target, PING_NOT_KNOWN);
 		return;
 	}
 	sockfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
@@ -93,22 +93,32 @@ void	init_socket(char *target)
 	dest_addr.sin_family = AF_INET;
 	inet_pton(AF_INET, ip, &dest_addr.sin_addr);
 	ft_printf("PING %s (%s): 64 data bytes\n", target, ip);
-	free(ip);
 	while (running)
 	{
-		send_packet(sockfd, dest_addr, seq);
-		receive_packet(sockfd);
-		seq++;
+		send_packet(sockfd, dest_addr, seq++);
+		receive_packet(sockfd, ip);
 		sleep(1);
 	}
+	free(ip);
 	close(sockfd);
-	ft_printf("\n--- %s ping statistics ---\n", PING_STAT, target);
-	printf("%d packets transmitted, %d received, %.0f%% packet loss\n",
-		sent_count, received_count,
-		(sent_count - received_count) * 100.0 / (sent_count ? sent_count : 1));
+	print_statistic(target);
 }
 
-void	receive_packet(int sockfd)
+void	print_statistic(char *target)
+{
+	float	packet_loss;
+
+	packet_loss = 0.0;
+	if (sent_count)
+		packet_loss = (sent_count - received_count) * 100.0 / (sent_count);
+	else
+		packet_loss = (sent_count - received_count) * 100.0 / (1);
+	ft_printf("\n--- %s ping statistics ---\n", target);
+	printf("%d packets transmitted, %d received, %.0f%% packet loss\n",
+		sent_count, received_count,packet_loss);
+}
+
+void	receive_packet(int sockfd, char *address)
 {
 	struct timeval	start, end;
 	struct iphdr 	*ip;
@@ -125,6 +135,6 @@ void	receive_packet(int sockfd)
 		elapsed = (end.tv_sec - start.tv_sec) * 1000.0 +
 						(end.tv_usec - start.tv_usec) / 1000.0;
 		received_count++;
-		printf("%ld bytes from ...: icmp_seq=%d time=%.2f ms\n", recv_bytes, received_count, elapsed);
+		printf("%ld bytes from %s: icmp_seq=%d time=%.2f ms\n", recv_bytes, address, received_count, elapsed);
 	}
 }

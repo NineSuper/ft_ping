@@ -6,9 +6,11 @@
 #    By: tde-los- <tde-los-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/07 11:20:15 by tde-los-          #+#    #+#              #
-#    Updated: 2025/04/23 10:25:42 by tde-los-         ###   ########.fr        #
+#    Updated: 2025/04/28 14:03:17 by tde-los-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+MAKEFLAGS += --silent
 
 SRCS	= ft_isalnum.c ft_isprint.c ft_memmove.c ft_putnbr_fd.c ft_strjoin.c ft_strncmp.c \
 	  ft_tolower.c ft_atoi.c ft_isalpha.c ft_memchr.c ft_memset.c ft_putstr_fd.c \

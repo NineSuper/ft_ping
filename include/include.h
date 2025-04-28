@@ -6,7 +6,7 @@
 /*   By: tde-los- <tde-los-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 14:47:42 by tde-los-          #+#    #+#             */
-/*   Updated: 2025/04/24 13:10:56 by tde-los-         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:02:18 by tde-los-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@
 /*	MESSAGE	*/
 # define SOCKET_OK "Socket créé avec succès, prêt à envoyer vers "
 # define ICMP_SEND "Paquet ICMP Echo envoyé !"
-# define PING_STAT "--- %s ping statistics ---"
+# define PING_NOT_KNOWN "Name or service not known"
 
 char			**ft_read_args(int argc, char **argv);
 void			ft_exit(char *msg, int error);
