@@ -6,7 +6,7 @@
 /*   By: tde-los- <tde-los-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:55:02 by tde-los-          #+#    #+#             */
-/*   Updated: 2025/04/29 10:16:38 by tde-los-         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:18:39 by tde-los-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ void	receive_packet(int sockfd)
 		elapsed = (end.tv_sec - start.tv_sec) * 1000.0 +
 				  (end.tv_usec - start.tv_usec) / 1000.0;
 		received_count++;
-
 		if (getnameinfo((struct sockaddr *)&sender_addr, sizeof(sender_addr),
 			host, sizeof(host), NULL, 0, 0) == 0)
 			printf("%ld bytes from %s (%s): icmp_seq=%d time=%.2f ms\n",
