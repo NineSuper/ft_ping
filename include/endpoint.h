@@ -6,7 +6,7 @@
 /*   By: tde-los- <tde-los-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 10:41:37 by tde-los-          #+#    #+#             */
-/*   Updated: 2025/04/28 14:13:24 by tde-los-         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:15:12 by tde-los-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ t_endpoint		ft_init_endpoint(char **args);
 char			*resolve_hostname(char *hostname);
 void			ft_free_endpoint(t_endpoint *endpoint);
 void			init_socket(char *target);
-void			receive_packet(int sockfd, char *address);
+void			receive_packet(int sockfd);
 void			print_statistic(char *target);
 void			send_packet(int sockfd, struct sockaddr_in dest_addr, int seq);
+void			print_flag(t_endpoint endpoint);
 
 #endif

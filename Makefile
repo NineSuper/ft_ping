@@ -27,8 +27,8 @@ HEADER_FILE = $(wildcard $(HEADER_DIR)/*.h)
 INC_SRCH_PATH = -I $(HEADER_DIR) -I $(LIBFT_DIR) -I $(PRINTF_DIR)
 
 CC = gcc
-#FLAGS = -Wall -Werror -Wextra
-FLAGS =
+FLAGS = -Wall -Werror -Wextra
+#FLAGS =
 
 ifeq ($(UNAME_S),Linux)		# Linux
     LFLAGS =

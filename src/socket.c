@@ -6,7 +6,7 @@
 /*   By: tde-los- <tde-los-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:55:02 by tde-los-          #+#    #+#             */
-/*   Updated: 2025/04/28 12:03:53 by tde-los-         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:16:38 by tde-los-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ void	send_packet(int sockfd, struct sockaddr_in dest_addr, int seq)
 void	init_socket(char *target)
 {
 	struct sockaddr_in	dest_addr;
+	struct timeval		timeout;
 	char				*ip;
 	int					sockfd;
 	int					seq = 1;
-	struct timeval		timeout;
 
 	signal(SIGINT, handle_sigint);
 	ip = resolve_hostname(target);
@@ -96,7 +96,7 @@ void	init_socket(char *target)
 	while (running)
 	{
 		send_packet(sockfd, dest_addr, seq++);
-		receive_packet(sockfd, ip);
+		receive_packet(sockfd);
 		sleep(1);
 	}
 	free(ip);
@@ -118,23 +118,32 @@ void	print_statistic(char *target)
 		sent_count, received_count,packet_loss);
 }
 
-void	receive_packet(int sockfd, char *address)
+void	receive_packet(int sockfd)
 {
-	struct timeval	start, end;
-	struct iphdr 	*ip;
-	char 			buffer[1024];
-	double 			elapsed;
-	ssize_t 		recv_bytes;
+	struct timeval		start, end;
+	struct sockaddr_in	sender_addr;
+	char				buffer[1024];
+	double				elapsed;
+	ssize_t				recv_bytes;
+	socklen_t			addr_len = sizeof(sender_addr);
+	char				host[NI_MAXHOST];
 
 	gettimeofday(&start, NULL);
-	recv_bytes = recv(sockfd, buffer, sizeof(buffer), 0);
+	recv_bytes = recvfrom(sockfd, buffer, sizeof(buffer), 0,
+		(struct sockaddr *)&sender_addr, &addr_len);
 	gettimeofday(&end, NULL);
 	if (recv_bytes > 0)
 	{
-		ip = (struct iphdr *)buffer;
 		elapsed = (end.tv_sec - start.tv_sec) * 1000.0 +
-						(end.tv_usec - start.tv_usec) / 1000.0;
+				  (end.tv_usec - start.tv_usec) / 1000.0;
 		received_count++;
-		printf("%ld bytes from %s: icmp_seq=%d time=%.2f ms\n", recv_bytes, address, received_count, elapsed);
+
+		if (getnameinfo((struct sockaddr *)&sender_addr, sizeof(sender_addr),
+			host, sizeof(host), NULL, 0, 0) == 0)
+			printf("%ld bytes from %s (%s): icmp_seq=%d time=%.2f ms\n",
+				recv_bytes, host, inet_ntoa(sender_addr.sin_addr), received_count, elapsed);
+		else
+			printf("%ld bytes from %s: icmp_seq=%d time=%.2f ms\n",
+				recv_bytes, inet_ntoa(sender_addr.sin_addr), received_count, elapsed);
 	}
 }

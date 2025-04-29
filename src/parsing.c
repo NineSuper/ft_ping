@@ -6,7 +6,7 @@
 /*   By: tde-los- <tde-los-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:54:31 by tde-los-          #+#    #+#             */
-/*   Updated: 2025/04/28 15:12:49 by tde-los-         ###   ########.fr       */
+/*   Updated: 2025/04/29 09:45:27 by tde-los-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 char	**ft_read_args(int argc, char **argv)
 {
-	t_endpoint	endpoint;
 	char 		**tab;
 	char		*str;
 	char		*tmp;
